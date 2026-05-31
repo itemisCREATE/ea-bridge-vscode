@@ -60,11 +60,12 @@ ea-bridge export model.qea | python generate.py
 This extension is currently a work in progress. Some features may be missing. We appreciate your patience and feedback as we continue to improve it! If you encounter any issues or have feature requests, feel free to open a ticket on our [issue tracker](https://github.com/itemisCREATE/ea-bridge-vscode/issues).
 
 The following features are not yet implemented:
-- **Diagrams**: are not yet complete.
-- **Properties**: or model elements may still be missing - [submit an issue](https://github.com/itemisCREATE/ea-bridge-vscode/issues/new/choose) if you need a specific element or property.
+- **Diagrams**: are not yet complete; initial focus is on structural diagrams, behavioral ones are added soon.
+- **Properties**: or model elements may still be missing.
 - **Remote Databases**: like MS SQL or MySQL/MariaDB are coming soon; at the moment, only `eap(x)` and `qea(x)` files can be loaded.
 - **Licensing**: is not yet implemented; itemis EA Bridge is **free for small to medium-sized models**, but large models (with 2000+ elements) can currently not be loaded.
 
+&rarr; [Submit an issue](https://github.com/itemisCREATE/ea-bridge-vscode/issues/new/choose) if you need a specific diagram, element or property to be loaded, or if a database adapter is missing for you.
 
 ## Links
 
