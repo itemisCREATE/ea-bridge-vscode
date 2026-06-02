@@ -1,4 +1,4 @@
-# <img src="media/ea-bridge-logo.svg" width="32" alt="EA-Bridge Logo"> Enterprise Architect (EA) Bridge
+# ![EA Bridge Logo](media/ea-bridge_32.png) Enterprise Architect (EA) Bridge
 
 **Browse, navigate, export, and process Enterprise Architect models on Windows, Mac OS, and Linux, also with AI.**
 
