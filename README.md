@@ -10,7 +10,7 @@ Export your models in a terminal and pass them to code templates for quick and e
 
 ## Why EA Bridge?
 
-EA's native tooling requires a full installation and is limited to Windows. *EA Bridge removes both constraints* — for architects who need to browse models and for engineers who need to process them in pipelines.
+EA's native tooling requires a full installation and is limited to Windows. *EA Bridge removes both constraints*, for architects who need to browse models and for engineers who need to process them in pipelines.
 
 |  | before | **with EA Bridge** |
 |---|---|---|
@@ -23,7 +23,7 @@ EA's native tooling requires a full installation and is limited to Windows. *EA 
 
 ## For Architects — Browse your EA Model in VS Code
 
-Open a `.qea(x)` or `.eap(x)` file in VS Code and navigate the complete UML model as a tree — even on a MacBook or a Linux workstation.
+Open a `.qea(x)` or `.eap(x)` file in VS Code and navigate the complete UML model as a tree, even on a MacBook or a Linux workstation.
 
 ![Browse your EA model in VS Code](media/browse.gif)
 
@@ -54,13 +54,14 @@ The skill loads the JSON export and lets the AI reason over your model structure
 > *"Extend the Python templates to add the Author and ModifiedDate of each element to its docstring."*<br>
 > *"Add a `@since` Javadoc tag to every generated Java class using the element's version field."*
 
-The AI invokes the CLI and the bundled Jinja2 templates on your behalf — no manual command line required.<br>
+The AI invokes the CLI and the bundled Jinja2 templates on your behalf (no manual command line required).<br>
 It can also edit the Jinja2 templates directly in your workspace, so the change is version-controlled and reusable across your whole team.
 
 
 ## For Engineers — EA Models as First-Class CI Artifacts
 
-Export any EA model to a stable, versioned JSON format with a single command. Pipe it into Jinja2 templates, custom scripts, or AI tools — on any OS, on any CI runner, without a Windows agent or EA seat.
+Export any EA model to a stable, versioned JSON format with a single command.
+Pipe it into Jinja2 templates, custom scripts, or AI tools — on any OS, on any CI runner, without a Windows agent or EA seat.
 
 ```bash
 ea-bridge export model.qea --output model.json
