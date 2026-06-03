@@ -25,7 +25,7 @@ EA's native tooling requires a full installation and is limited to Windows. *EA 
 
 Open a `.qea(x)` or `.eap(x)` file in VS Code and navigate the complete UML model as a tree, even on a MacBook or a Linux workstation.
 
-![Browse your EA model in VS Code](media/browse.gif)
+![Browse your EA model in VS Code](https://raw.githubusercontent.com/itemisCREATE/ea-bridge-vscode/refs/heads/main/media/browse.gif)
 
 - **UML hierarchy tree** — mirrors EA's own package and element structure, with type-specific icons
 - **Element property panel** — name, type, stereotype, tagged values, attributes, operations, and connectors on selection
@@ -38,7 +38,7 @@ Open a `.qea(x)` or `.eap(x)` file in VS Code and navigate the complete UML mode
 
 EA Bridge ships an **`ea-bridge` AI skill** for that turns your model into a queryable knowledge base.
 
-![Ask questions about your EA model with AI](media/ai-skill.gif)
+![Ask questions about your EA model with AI](https://raw.githubusercontent.com/itemisCREATE/ea-bridge-vscode/refs/heads/main/media/ai-skill.gif)
 
 The skill loads the JSON export and lets the AI reason over your model structure, relationships, stereotypes, tagged values, etc.
 
@@ -72,7 +72,7 @@ ea-bridge export model.qea --output model.json
 ea-bridge export model.qea | python generate.py
 ```
 
-![EA Bridge CLI export](media/cli.gif)
+![EA Bridge CLI export](https://raw.githubusercontent.com/itemisCREATE/ea-bridge-vscode/refs/heads/main/media/cli.gif)
 
 - **Cross-platform CLI** — pre-built binaries for Windows (x64), macOS (x64 + ARM), and Linux (x64 + ARM)
 - **Versioned JSON schema** — stable contract for downstream tools
