@@ -1,6 +1,12 @@
 # Change Log
 
-## [0.9.0] - Initial (Preview) Release
+## [1.0.1] - Initial Release
+
+- Formal adjustments for VS Code Marketplace.
+- Example model added
+
+
+## [1.0.0] - Initial (Preview) Release
 
 This is the first release of the itemis EA Bridge for Visual Studio Code, which enables opening and processing EA models independent of Enterprise Architect, flexible, and fast. The release includes the following key features:
 
