@@ -1,9 +1,13 @@
 # Change Log
 
-## [1.0.1] - Initial Release
+## [1.0.2]
+
+- File icon theme removed again because it removed icons of all other file types except for EA models.
+
+## [1.0.1]
 
 - Formal adjustments for VS Code Marketplace.
-- Example model added
+- Example model added.
 
 
 ## [1.0.0] - Initial (Preview) Release
