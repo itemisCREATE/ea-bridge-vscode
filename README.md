@@ -1,8 +1,8 @@
 # ![EA Bridge Logo](media/ea-bridge_32.png) Enterprise Architect (EA) Bridge
 
-**Browse, navigate, export, and process Enterprise Architect models on Windows, Mac OS, and Linux, also with AI.**
+**Browse, navigate, export, and process EA models on Windows, Mac OS, and Linux, also with AI.**
 
-itemis EA Bridge reads your `.qea(x)` and `.eap(x)` project files directly. Open a model, explore its full UML hierarchy, view element properties, and render diagrams — all inside VS Code, on any OS, without EA.
+itemis EA Bridge reads your `.qea(x)` and `.eap(x)` project files directly (incl. MySQL/MS SQL databases). Open a model, explore its full UML hierarchy, view element properties, and render diagrams — all inside VS Code, on any OS, without EA.
 Export your models in a terminal and pass them to code templates for quick and easy code generation, or use AI to analyze your model or to customize code generation templates.
 
 > ⚠️ **Early stage:** This extension is still incomplete and may contain bugs. [Feedback and bug reports](https://github.com/itemisCREATE/ea-bridge-vscode/issues/new) are welcome.
@@ -23,7 +23,7 @@ EA's native tooling requires a full installation and is limited to Windows. *EA 
 
 ## For Architects — Browse your EA Model in VS Code
 
-Open a `.qea(x)` or `.eap(x)` file in VS Code and navigate the complete UML model as a tree, even on a MacBook or a Linux workstation.
+Open a `.qea(x)` or `.eap(x)` file (incl. MySQL/MS SQL databases) in VS Code and navigate the complete UML model as a tree, even on a MacBook or a Linux workstation.
 
 ![Browse your EA model in VS Code](https://raw.githubusercontent.com/itemisCREATE/ea-bridge-vscode/refs/heads/main/media/browse.gif)
 
@@ -88,7 +88,7 @@ This extension is currently a work in progress. Some features may be missing. We
 The following features are planned for implementation:
 - **Diagrams**: are not yet complete; initial focus is on structural diagrams, behavioral ones are added soon.
 - **Properties**: or model elements may still be missing.
-- **Remote Databases**: like MS SQL or MySQL/MariaDB are coming soon; at the moment, only `eap(x)` and `qea(x)` files can be loaded.
+- **Remote Databases**: MS SQL and MySQL/MariaDB are now supported, others like Oracle, PostgreSQL, and Cloud connections not yet.
 - **Licensing**: is not yet implemented; itemis EA Bridge is **free for small to medium-sized models**, but large models (with 2000+ elements) can currently not be loaded.
 
 &rarr; [Submit an issue](https://github.com/itemisCREATE/ea-bridge-vscode/issues/new/choose) if you need a specific diagram, element or property to be loaded, or if a database adapter is missing for you.

@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.3]
+
+- Support added for loading models from MySQL/MariaDB remote databases (via EA shortcut files).
+- A new command 'query' added to the CLI which allows running jq-queries against an EA model; AI skill will use that for more efficient reasoning about a model.
+
 ## [1.0.2]
 
 - File icon theme removed again because it removed icons of all other file types except for EA models.
