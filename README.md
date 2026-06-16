@@ -21,7 +21,7 @@ EA's native tooling requires a full installation and is limited to Windows. *EA 
 | *CI / CD pipelines* | Not suitable | **First-class CLI support** |
 
 
-## For Architects — Browse your EA Model in VS Code
+## Browse your EA Model in VS Code — For Architects
 
 Open a `.qea(x)` or `.eap(x)` file (incl. MySQL/MS SQL databases) in VS Code and navigate the complete UML model as a tree, even on a MacBook or a Linux workstation.
 
@@ -36,17 +36,25 @@ Open a `.qea(x)` or `.eap(x)` file (incl. MySQL/MS SQL databases) in VS Code and
 
 ## Process your EA Models with AI
 
-EA Bridge ships an **`ea-bridge` AI skill** for that turns your model into a queryable knowledge base.
+EA Bridge ships an **`ea-bridge` AI skill** that turns your model into a queryable knowledge base.
 
 ![Ask questions about your EA model with AI](https://raw.githubusercontent.com/itemisCREATE/ea-bridge-vscode/refs/heads/main/media/ai-skill.gif)
 
-The skill loads the JSON export and lets the AI reason over your model structure, relationships, stereotypes, tagged values, etc.
-
 **Ask questions about your model:**
 
+> *"Count interfaces in EAExample.qea"*<br>
 > *"How many classes in my EA model have outgoing dependency connectors?"*<br>
-> *"List all interfaces in package `com.example.api`."*<br>
 > *"Which elements carry the stereotype `«Service»`?"*
+
+For concrete questions like these, the AI does **not** read your model into its context. Instead, it translates the question into a [jq](https://jqlang.github.io/jq/) query, which the CLI evaluates against the model and returns **only the result**. For example:
+
+```text
+"Count interfaces in EAExample.qea"
+> ./ea-bridge query EAExample.qea '[.elements[] | select(.elementType=="Interface")] | length'
+> Result: 99
+```
+
+This has two benefits. It **scales to large models**, because a multi-MB model never has to enter the AI's limited context window. And your **model contents stay local** — the AI only constructs query strings, while the CLI does the actual data processing on your machine. The full JSON export is used only as a fallback for broad, open-ended questions where the surrounding context matters.
 
 **Trigger and customize code generation:**
 
@@ -54,14 +62,14 @@ The skill loads the JSON export and lets the AI reason over your model structure
 > *"Extend the Python templates to add the Author and ModifiedDate of each element to its docstring."*<br>
 > *"Add a `@since` Javadoc tag to every generated Java class using the element's version field."*
 
-The AI invokes the CLI and the bundled Jinja2 templates on your behalf (no manual command line required).<br>
-It can also edit the Jinja2 templates directly in your workspace, so the change is version-controlled and reusable across your whole team.
+The AI invokes the CLI and the bundled [Jinja templates](https://jinja.palletsprojects.com/) on your behalf (no manual command line required).<br>
+It can also edit the Jinja templates directly in your workspace, so the change is version-controlled and reusable across your whole team.
 
 
-## For Engineers — EA Models as First-Class CI Artifacts
+## EA Models as First-Class CI Artifacts — For Engineers
 
 Export any EA model to a stable, versioned JSON format with a single command.
-Pipe it into Jinja2 templates, custom scripts, or AI tools — on any OS, on any CI runner, without a Windows agent or EA seat.
+Pipe it into Jinja templates, custom scripts, or AI tools — on any OS, on any CI runner, without a Windows agent or EA seat.
 
 ```bash
 ea-bridge export model.qea --output model.json
@@ -76,7 +84,7 @@ ea-bridge export model.qea | python generate.py
 
 - **Cross-platform CLI** — pre-built binaries for Windows (x64), macOS (x64 + ARM), and Linux (x64 + ARM)
 - **Versioned JSON schema** — stable contract for downstream tools
-- **Sample codegen templates** — Jinja2 templates for common code generation patterns ship with the extension, ready to be customized and extended
+- **Sample codegen templates** — Jinja templates for common code generation patterns ship with the extension, ready to be customized and extended
 - **AI-ready** — feed the JSON export to Claude, Copilot, or any LLM-based tool to analyze the model or to let AI customize your code generation templates
 - **CI-friendly** — JSON to stdout, diagnostics to stderr, documented exit codes
 
