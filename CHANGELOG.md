@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.4]
+
+- Improve diagram rendering of use case diagrams; also add rendering of artifacts and interfaces in circle notation.
+- Minor improvements in model filtering and AI queries about diagrams.
+
 ## [1.0.3]
 
 - Support added for loading models from MySQL/MariaDB remote databases (via EA shortcut files).
