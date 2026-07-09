@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.0.5]
+
+- New command "EA Bridge: Set up AI Assistant" equips the current workspace for AI-assisted model processing in one step: the `ea-bridge` skill and an MCP server.
+- New MCP server bundled with the extension. It exposes EA Bridge tools (CLI location, JSON schema, codegen template import, diagram listing/export) to Claude Code and to GitHub Copilot agent mode.
+- Diagram export to SVG via AI: assistants can now render diagrams of a model to standalone `.svg` files headlessly, without EA and without an open VS Code window.
+- Diagrams are now rendered at 100% zoom level (instead of window-filled).
+- Most diagram properties are respected during rendering (e.g. hidden features).
+
 ## [1.0.4]
 
 - Improve diagram rendering of use case diagrams; also add rendering of artifacts and interfaces in circle notation.
@@ -7,7 +15,7 @@
 
 ## [1.0.3]
 
-- Support added for loading models from MySQL/MariaDB remote databases (via EA shortcut files).
+- Support added for loading models from MySQL/MariaDB and MS SQL Server remote databases (via EA shortcut files).
 - A new command 'query' added to the CLI which allows running jq-queries against an EA model; AI skill will use that for more efficient reasoning about a model.
 
 ## [1.0.2]

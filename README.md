@@ -1,4 +1,4 @@
-# ![EA Bridge Logo](media/ea-bridge_32.png) Enterprise Architect (EA) Bridge
+# ![EA Bridge Logo](media/ea-bridge-32.png) Enterprise Architect (EA) Bridge
 
 **Browse, navigate, export, and process EA models on Windows, Mac OS, and Linux, also with AI.**
 
@@ -17,7 +17,7 @@ EA's native tooling requires a full installation and is limited to Windows. *EA 
 | *OS support* | Windows only | Windows · **MacOS** · **Linux** |
 | *EA required* | Yes | **No** |
 | *Speed* | Slow (COM API) | **FAST — Rust backend, direct file access** |
-| *AI tool integration* | EA ecosystem only | **Any tool that reads JSON** |
+| *AI tool integration* | EA ecosystem only | **AI skill + MCP server for Claude Code & Copilot; JSON for any other tool** |
 | *CI / CD pipelines* | Not suitable | **First-class CLI support** |
 
 
@@ -36,7 +36,11 @@ Open a `.qea(x)` or `.eap(x)` file (incl. MySQL/MS SQL databases) in VS Code and
 
 ## Process your EA Models with AI
 
-EA Bridge ships an **`ea-bridge` AI skill** that turns your model into a queryable knowledge base.
+EA Bridge turns your model into a queryable knowledge base for AI assistants: an **`ea-bridge` AI skill** teaches the assistant how to work with EA models, and a bundled **MCP server** hands it the tools (model queries, code generation, diagram export).
+
+**One-command setup:** run **EA Bridge: Set up AI Assistant** from the command palette to equip the open workspace.
+
+Your data remains local — the assistant constructs queries, while the bundled CLI does the data processing on your machine.
 
 ![Ask questions about your EA model with AI](https://raw.githubusercontent.com/itemisCREATE/ea-bridge-vscode/refs/heads/main/media/ai-skill.gif)
 
@@ -64,6 +68,13 @@ This has two benefits. It **scales to large models**, because a multi-MB model n
 
 The AI invokes the CLI and the bundled [Jinja templates](https://jinja.palletsprojects.com/) on your behalf (no manual command line required).<br>
 It can also edit the Jinja templates directly in your workspace, so the change is version-controlled and reusable across your whole team.
+
+**Export diagrams as SVG:**
+
+> *"Export all diagrams of MyModel.qea as SVG."*<br>
+> *"Render the Communication Stack diagram to docs/architecture.svg."*
+
+The AI lists the diagrams in your model and renders any number of them to standalone `.svg` files in a single pass — headlessly. No EA installation needed, and when driven from Claude Code, not even an open VS Code window.
 
 
 ## EA Models as First-Class CI Artifacts — For Engineers
