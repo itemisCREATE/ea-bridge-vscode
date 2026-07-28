@@ -1,12 +1,21 @@
 # Change Log
 
+## [1.0.6]
+
+- Rendering support added for interaction/sequence diagrams.
+- Rendering support added for activity diagrams incl. actions.
+- When a 'default diagram' is configured for a project, that diagram is opened when loading a model.
+- Diagram UX: mouse wheel now scrolls diagrams vertically (just like in EA), use Ctrl + mouse wheel for zoom.
+- SQL console added for quick and easy database access.
+- Loading large models (1000+ elements) is now possible with a (free) login.
+
 ## [1.0.5]
 
 - New command "EA Bridge: Set up AI Assistant" equips the current workspace for AI-assisted model processing in one step: the `ea-bridge` skill and an MCP server.
 - New MCP server bundled with the extension. It exposes EA Bridge tools (CLI location, JSON schema, codegen template import, diagram listing/export) to Claude Code and to GitHub Copilot agent mode.
 - Diagram export to SVG via AI: assistants can now render diagrams of a model to standalone `.svg` files headlessly, without EA and without an open VS Code window.
 - Diagrams are now rendered at 100% zoom level (instead of window-filled).
-- Most diagram properties are respected during rendering (e.g. hidden features).
+- Most diagram properties are respected during rendering (e.g. hidden connectors).
 
 ## [1.0.4]
 

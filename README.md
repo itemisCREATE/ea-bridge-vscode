@@ -5,7 +5,7 @@
 itemis EA Bridge reads your `.qea(x)` and `.eap(x)` project files directly (incl. MySQL/MS SQL databases). Open a model, explore its full UML hierarchy, view element properties, and render diagrams — all inside VS Code, on any OS, without EA.
 Export your models in a terminal and pass them to code templates for quick and easy code generation, or use AI to analyze your model or to customize code generation templates.
 
-> ⚠️ **Early stage:** This extension is still incomplete and may contain bugs. [Feedback and bug reports](https://github.com/itemisCREATE/ea-bridge-vscode/issues/new) are welcome.
+> ⚠️ **Early stage:** This extension is still in development and may contain bugs. [Feedback and bug reports](https://github.com/itemisCREATE/ea-bridge-vscode/issues/new) are welcome.
 
 
 ## Why EA Bridge?
@@ -55,7 +55,7 @@ For concrete questions like these, the AI does **not** read your model into its 
 ```text
 "Count interfaces in EAExample.qea"
 > ./ea-bridge query EAExample.qea '[.elements[] | select(.elementType=="Interface")] | length'
-> Result: 99
+> 99
 ```
 
 This has two benefits. It **scales to large models**, because a multi-MB model never has to enter the AI's limited context window. And your **model contents stay local** — the AI only constructs query strings, while the CLI does the actual data processing on your machine. The full JSON export is used only as a fallback for broad, open-ended questions where the surrounding context matters.
@@ -88,7 +88,7 @@ ea-bridge export model.qea --output model.json
 
 ```bash
 # Or pipe directly into downstream tooling
-ea-bridge export model.qea | python generate.py
+ea-bridge export model.qea | python gen-cpp.py - ./src-gen-cpp/
 ```
 
 ![EA Bridge CLI export](https://raw.githubusercontent.com/itemisCREATE/ea-bridge-vscode/refs/heads/main/media/cli.gif)
@@ -100,6 +100,23 @@ ea-bridge export model.qea | python generate.py
 - **CI-friendly** — JSON to stdout, diagnostics to stderr, documented exit codes
 
 
+## Integrated SQL console
+
+Run ad-hoc SQL queries directly against your EA model — no separate database client needed.
+Launch it from the CLI, or right from the **EA Model Explorer** panel via **Open in SQL Console**.
+
+```bash
+ea-bridge sql model.qea
+```
+
+![EA Bridge SQL console](https://raw.githubusercontent.com/itemisCREATE/ea-bridge-vscode/refs/heads/main/media/sql-console.png)
+
+- **Read-only by default** — explore freely; write access must be enabled explicitly and requires sign-in
+- **Works across all supported databases** — full SQL on `.qea`/`.qeax` and remote MySQL/MariaDB and MS SQL connections; table browsing on legacy `.eap`/`.eapx` files
+- **`tables`, `columns <table>`** — quickly inspect the underlying schema
+- **`select ... | grep <pattern>`** — filter results with a case-insensitive regex
+
+
 ## ⚠️ Extension in Development
 
 This extension is currently a work in progress. Some features may be missing. We appreciate your patience and feedback as we continue to improve it! If you encounter any issues or have feature requests, feel free to open a ticket on our [issue tracker](https://github.com/itemisCREATE/ea-bridge-vscode/issues). For urgent cases, [contact us directly](https://www.itemis.com/en/products/ea-bridge/contact/?message=Request+for+itemis+EA-Bridge+for+VS-Code:).
@@ -108,9 +125,9 @@ The following features are planned for implementation:
 - **Diagrams**: are not yet complete; initial focus is on structural diagrams, behavioral ones are added soon.
 - **Properties**: or model elements may still be missing.
 - **Remote Databases**: MS SQL and MySQL/MariaDB are now supported, others like Oracle, PostgreSQL, and Cloud connections not yet.
-- **Licensing**: is not yet implemented; itemis EA Bridge is **free for small to medium-sized models**, but large models (with 2000+ elements) can currently not be loaded.
+- **Licensing**: is not yet fully implemented; itemis EA Bridge is and remains **free for small to medium-sized models**, but large models (with 1000+ elements) can currently only be loaded after (free) login — payed licenses are planned once the product reaches a higher level of maturity.
 
-&rarr; [Submit an issue](https://github.com/itemisCREATE/ea-bridge-vscode/issues/new/choose) if you need a specific diagram, element or property to be loaded, or if a database adapter is missing for you.
+&rarr; [Submit an issue](https://github.com/itemisCREATE/ea-bridge-vscode/issues/new/choose) if you need a specific diagram, element, or property to be loaded, or if a database adapter is missing for you.
 
 ## Links
 
