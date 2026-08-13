@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.7]
+
+- Fix setup command for AI skill.
+
 ## [1.0.6]
 
 - Rendering support added for interaction/sequence diagrams.
