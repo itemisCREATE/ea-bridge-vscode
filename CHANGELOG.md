@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.8]
+
+- Increase load performance.
+- Improve loading diagrams: rendering curved connections, hyperlinks added, and overlapping packages (z-order) fixed.
+
 ## [1.0.7]
 
 - Fix setup command for AI skill.
