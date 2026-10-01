@@ -1,0 +1,9 @@
+{
+  "jq": ".elements as $e | [.connectors[] | select(.connectorType==\"Generalization\" and $e[.targetElementGuid].name==\"NamedElement\") | $e[.sourceElementGuid].name] | sort",
+  "answer": [
+    "Account",
+    "AddressBook",
+    "Contact",
+    "ContactGroup"
+  ]
+}

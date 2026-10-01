@@ -1,0 +1,36 @@
+{
+  "_comment": "Single source of timing (seconds) for video.js (visuals), music.mjs (soundtrack) and mix.mjs (voice-over). 120 BPM: keep cue times on the 0.5 s beat grid where possible. voice: [{ file, scene, offset } | { file, at }] — see mix.mjs.",
+  "duration": 60,
+  "bpm": 120,
+  "scenes": {
+    "intro":    [0, 5],
+    "why":      [5, 12],
+    "browse":   [12, 22],
+    "diagrams": [22, 27],
+    "thousand": [27, 34],
+    "ai":       [34, 45],
+    "cli":      [45, 55],
+    "outro":    [55, 60]
+  },
+  "cuts": [5, 12, 22, 34, 45, 55],
+  "logoLock": 0.8,
+  "clicks": [14.45, 19.4, 19.56],
+  "wave": [26.85, 30.9],
+  "drop": 31.0,
+  "finalHit": 55.0,
+  "voice": [
+    { "file": "voice/01-intro.mp3",    "scene": "intro",    "offset": 1.0 },
+    { "file": "voice/02-why.mp3",      "scene": "why",      "offset": 0.3 },
+    { "file": "voice/03-browse.mp3",   "scene": "browse",   "offset": 0.4 },
+    { "file": "voice/04-diagrams.mp3", "scene": "diagrams", "offset": 0.3 },
+    { "file": "voice/05-thousand.mp3", "scene": "thousand", "offset": 1.0 },
+    { "file": "voice/06-ai.mp3",       "scene": "ai",       "offset": 0.5 },
+    { "file": "voice/07-cli.mp3",      "scene": "cli",      "offset": 0.4 },
+    { "file": "voice/08-outro.mp3",    "scene": "outro",    "offset": 0.4 }
+  ],
+  "typing": {
+    "question": [34.8, 36.3],
+    "query":    [37.75, 40.3],
+    "command":  [45.6, 47.2]
+  }
+}

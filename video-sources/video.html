@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<title>EA Bridge Feature Video</title>
+<link rel="icon" href="data:,">
+<script>
+// Mode switch, read by video.js and the CSS below:
+//   ?render → frame renderer (render.mjs)   ?dev → scrubber preview   default → website player (player.js)
+document.documentElement.dataset.mode = (() => {
+  const q = new URLSearchParams(location.search);
+  return q.has('render') ? 'render' : q.has('dev') ? 'dev' : 'site';
+})();
+</script>
+<!-- Local fonts (no network needed while rendering) -->
+<link rel="stylesheet" href="node_modules/@fontsource/inter/400.css">
+<link rel="stylesheet" href="node_modules/@fontsource/inter/500.css">
+<link rel="stylesheet" href="node_modules/@fontsource/inter/600.css">
+<link rel="stylesheet" href="node_modules/@fontsource/inter/700.css">
+<link rel="stylesheet" href="node_modules/@fontsource/inter/800.css">
+<link rel="stylesheet" href="node_modules/@fontsource/inter/900.css">
+<link rel="stylesheet" href="node_modules/@fontsource/jetbrains-mono/400.css">
+<link rel="stylesheet" href="node_modules/@fontsource/jetbrains-mono/600.css">
+<style>
+:root {
+  --bg: #050B1A;
+  --blue: #00AFFF;
+  --blue2: #006ECD;
+  --ink: #EAF2FF;
+  --muted: #8DA2C4;
+  --mint: #4FE3B0;
+  --line: rgba(120, 170, 255, .16);
+  --card: rgba(13, 26, 54, .78);
+}
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+body { font-family: Inter, sans-serif; }
+
+/* ---- stage (always 1920x1080; scaled to fit the window in dev-preview and website mode) ---- */
+#stage {
+  position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden;
+  background: radial-gradient(1400px 900px at 50% 38%, #0D1D42 0%, #071027 55%, #03060F 100%);
+  color: var(--ink); transform-origin: 0 0;
+}
+#bg { position: absolute; inset: 0; }
+.glow { position: absolute; width: 1100px; height: 1100px; border-radius: 50%; pointer-events: none;
+        background: radial-gradient(circle, rgba(0,175,255,.22) 0%, rgba(0,110,205,.10) 35%, rgba(0,0,0,0) 70%); }
+#glow1 { left: -250px; top: -420px; }
+#glow2 { left: 1100px; top: 420px; background: radial-gradient(circle, rgba(70,90,255,.18) 0%, rgba(0,110,205,.08) 35%, rgba(0,0,0,0) 70%); }
+#flash { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, #BFEAFF 0%, #00AFFF 45%, rgba(0,110,205,0) 80%); opacity: 0; pointer-events: none; mix-blend-mode: screen; }
+#progress { position: absolute; left: 0; bottom: 0; height: 4px; width: 0; background: linear-gradient(90deg, var(--blue2), var(--blue)); box-shadow: 0 0 12px var(--blue); }
+
+.scene { position: absolute; inset: 0; visibility: hidden; transform-origin: 50% 50%; }
+.abs { position: absolute; }
+.kicker { font: 700 22px/1 Inter; letter-spacing: .26em; text-transform: uppercase; color: var(--blue); }
+.headline { font: 800 76px/1.06 Inter; letter-spacing: -.025em; }
+.sub { font: 400 30px/1.4 Inter; color: var(--muted); }
+.grad { background: linear-gradient(90deg, #00AFFF 0%, #7AD7FF 50%, #FFFFFF 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+.chip { display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; border-radius: 999px;
+        font: 600 24px/1 Inter; color: var(--ink); background: rgba(0,175,255,.10); border: 1px solid rgba(0,175,255,.38);
+        box-shadow: 0 0 24px rgba(0,175,255,.12) inset; white-space: nowrap; }
+.chip.mono { font: 600 24px/1 'JetBrains Mono', monospace; }
+.glass { background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+         box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.02) inset; }
+.word span { display: inline-block; }
+
+/* ---- scene 1: intro ---- */
+#s1logo { left: 840px; top: 118px; width: 240px; height: 240px; filter: drop-shadow(0 0 34px rgba(0,175,255,.55)); }
+#s1ring { left: 960px; top: 238px; width: 300px; height: 300px; margin: -150px 0 0 -150px; border-radius: 50%;
+          border: 3px solid var(--blue); opacity: 0; box-shadow: 0 0 40px var(--blue); }
+#s1kick { left: 0; width: 1920px; top: 398px; text-align: center; letter-spacing: .5em; color: var(--muted); }
+#s1word { left: 0; width: 1920px; top: 428px; text-align: center; font: 900 168px/1 Inter; letter-spacing: -.035em; perspective: 800px; }
+#s1tag { left: 0; width: 1920px; top: 640px; text-align: center; font: 500 44px/1.2 Inter; color: #C9D7EE; }
+#s1chips { left: 0; width: 1920px; top: 770px; display: flex; justify-content: center; gap: 22px; }
+
+/* ---- scene 2: why ---- */
+.cmp-row { position: absolute; left: 140px; width: 1640px; height: 132px; display: flex; align-items: center; padding: 0 44px; box-sizing: border-box; }
+.cmp-before { position: relative; width: 520px; font: 500 40px/1 Inter; color: #9FB0CC; }
+.cmp-before .bt { position: relative; display: inline-block; }
+.cmp-before .strike { position: absolute; left: -6px; right: auto; top: 50%; height: 4px; width: 0; background: #FF5D73; border-radius: 2px; box-shadow: 0 0 10px rgba(255,93,115,.7); }
+.cmp-arrow { width: 130px; }
+.cmp-after { display: flex; align-items: center; gap: 22px; font: 700 40px/1 Inter; color: #FFFFFF; }
+.check { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #00AFFF, #006ECD); display: grid; place-items: center; box-shadow: 0 0 22px rgba(0,175,255,.65); flex: none; }
+.pill-fast { font: 800 22px/1 Inter; letter-spacing: .2em; padding: 10px 16px; border-radius: 8px; color: #04101F; background: var(--mint); box-shadow: 0 0 22px rgba(79,227,176,.6); }
+#speed { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.sl { position: absolute; height: 2px; border-radius: 2px; background: linear-gradient(90deg, rgba(0,175,255,0), rgba(0,175,255,.85), rgba(255,255,255,.9)); }
+
+/* ---- scene 3: VS Code mockup ---- */
+#s3 { perspective: 2200px; }
+#win { left: 140px; top: 214px; width: 1640px; height: 836px; border-radius: 14px; overflow: hidden; background: #1E1E1E;
+       box-shadow: 0 50px 120px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.08), 0 0 80px rgba(0,175,255,.12); transform-origin: 50% 0; }
+.titlebar { height: 40px; background: #181818; display: flex; align-items: center; padding: 0 16px; gap: 9px; border-bottom: 1px solid #2B2B2B; }
+.titlebar i { width: 14px; height: 14px; border-radius: 50%; background: #3C3C3C; display: block; }
+.titlebar i:nth-child(1) { background: #FF5F57; } .titlebar i:nth-child(2) { background: #FEBC2E; } .titlebar i:nth-child(3) { background: #28C840; }
+.titlebar span { flex: 1; text-align: center; font: 500 17px/1 Inter; color: #9D9D9D; margin-right: 60px; }
+.wbody { position: absolute; top: 40px; bottom: 30px; left: 0; right: 0; display: flex; }
+.activity { width: 58px; background: #181818; border-right: 1px solid #2B2B2B; display: flex; flex-direction: column; align-items: center; padding-top: 12px; gap: 22px; }
+.activity .ai { width: 28px; height: 28px; opacity: .45; }
+.activity .ai.on { opacity: 1; position: relative; }
+.activity .ai.on::before { content: ''; position: absolute; left: -15px; top: -6px; width: 3px; height: 40px; background: var(--blue); }
+.sidebar { width: 640px; background: #181818; border-right: 1px solid #2B2B2B; display: flex; flex-direction: column; }
+.sbhead { height: 36px; display: flex; align-items: center; padding: 0 18px; font: 700 15px/1 Inter; letter-spacing: .08em; color: #CCCCCC; border-top: 1px solid #2B2B2B; }
+.sbhead:first-child { border-top: none; }
+.sbhead b { font-weight: 700; color: #8B8B8B; margin-right: 8px; }
+.tree { height: 344px; padding-top: 2px; }
+.trow { position: relative; height: 31px; display: flex; align-items: center; font: 400 19px/1 Inter; color: #CCCCCC; white-space: nowrap; }
+.trow .tw { width: 18px; color: #A0A0A0; font-size: 14px; text-align: center; margin-right: 4px; }
+.trow img { width: 24px; height: 24px; margin-right: 10px; image-rendering: auto; }
+.trow .ty { color: #7F8C9E; font-size: 16px; margin-left: 10px; }
+.trow.sel { background: #04395E; outline: 1px solid #0078D4; outline-offset: -1px; }
+.trow .hl { position: absolute; inset: 0; background: rgba(0,175,255,.0); }
+.props { flex: 1; padding: 6px 0 0; overflow: hidden; }
+.prow { display: flex; height: 24px; align-items: center; font: 400 16px/1 Inter; color: #CCCCCC; padding: 0 18px; white-space: nowrap; }
+.prow .k { width: 150px; color: #9CDCFE; flex: none; }
+.prow .v { overflow: hidden; text-overflow: ellipsis; }
+.prow.h { font-weight: 700; color: #E0E0E0; }
+.prow.h::before { content: '▾'; color: #A0A0A0; margin-right: 8px; font-size: 13px; }
+.prow .v.mono { font-size: 14px; color: #CE9178; }
+.prow .lnk { color: #3794FF; }
+.editor { flex: 1; position: relative; background: #1F1F1F; }
+.tabs { height: 38px; background: #181818; display: flex; border-bottom: 1px solid #2B2B2B; }
+.tab { display: flex; align-items: center; gap: 9px; padding: 0 18px; font: 400 16px/1 Inter; color: #FFFFFF; background: #1F1F1F; border-top: 2px solid var(--blue); }
+.tab img { width: 18px; height: 18px; }
+.watermark { position: absolute; left: 50%; top: 50%; width: 230px; height: 230px; margin: -115px 0 0 -115px; opacity: .07; }
+#edDiag { position: absolute; left: 24px; top: 58px; right: 24px; bottom: 20px; background: #FFFFFF; border-radius: 6px; display: grid; place-items: center; overflow: hidden; }
+#edDiag img { height: 96%; }
+.statusbar { position: absolute; left: 0; right: 0; bottom: 0; height: 30px; background: #006ECD; display: flex; align-items: center; gap: 26px; padding: 0 16px; font: 500 15px/1 Inter; color: #FFFFFF; }
+#cursor { left: 0; top: 0; width: 34px; height: 34px; filter: drop-shadow(0 3px 6px rgba(0,0,0,.6)); }
+.ripple { left: 0; top: 0; width: 70px; height: 70px; margin: -35px 0 0 -35px; border-radius: 50%; border: 3px solid var(--blue); opacity: 0; }
+
+/* ---- scene 4a: diagram ---- */
+#diagCard { left: 880px; top: 112px; width: 880px; height: 856px; background: #FFFFFF; border-radius: 20px; overflow: hidden;
+            box-shadow: 0 40px 120px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.2), 0 0 90px rgba(0,175,255,.35); }
+#diagCard .bar { height: 44px; background: #F3F6FA; border-bottom: 1px solid #DCE3EC; display: flex; align-items: center; padding: 0 18px; gap: 10px; font: 600 17px/1 Inter; color: #34435A; }
+#diagCard .bar img { width: 20px; height: 20px; }
+#diagCard .bar .exp { margin-left: auto; font: 700 15px/1 Inter; color: #FFFFFF; background: linear-gradient(135deg, #00AFFF, #006ECD); padding: 8px 14px; border-radius: 8px; }
+#diagHost { position: absolute; left: 20px; right: 20px; top: 56px; bottom: 16px; }
+#diagHost svg { width: 100%; height: 100%; }
+#s4types { left: 160px; top: 690px; display: flex; flex-wrap: wrap; gap: 16px; width: 640px; }
+
+/* ---- scene 4b: 1,000 diagrams ---- */
+#tiles { position: absolute; inset: 0; }
+#s4bShade { left: 310px; top: 190px; width: 1300px; height: 700px; border-radius: 50%;
+            background: radial-gradient(closest-side, rgba(4,10,24,.96) 0%, rgba(4,10,24,.9) 55%, rgba(4,10,24,0) 100%); }
+#s4bKick { left: 0; width: 1920px; top: 300px; text-align: center; }
+#counter { left: 0; width: 1920px; top: 336px; text-align: center; font: 900 230px/1 Inter; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+#s4bLine { left: 0; width: 1920px; top: 590px; text-align: center; font: 700 52px/1 Inter; color: #DCE8FA; }
+#s4bSlam { left: 0; width: 1920px; top: 672px; text-align: center; font: 900 84px/1 Inter; letter-spacing: -.02em; }
+#s4bSlam span { color: #04101F; background: linear-gradient(90deg, #4FE3B0, #00AFFF); padding: 6px 28px 12px; border-radius: 18px; box-shadow: 0 0 60px rgba(79,227,176,.55); }
+
+/* ---- scene 5: AI ---- */
+#chat { left: 880px; top: 120px; width: 880px; height: 840px; display: flex; flex-direction: column; overflow: hidden; }
+.chathead { height: 64px; display: flex; align-items: center; gap: 14px; padding: 0 26px; border-bottom: 1px solid var(--line); font: 700 21px/1 Inter; }
+.chathead .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 12px var(--mint); }
+.chathead .tag { margin-left: auto; font: 600 16px/1 'JetBrains Mono', monospace; color: var(--muted); }
+.chatbody { position: relative; flex: 1; padding: 28px 30px; }
+.bubble-user { position: absolute; right: 30px; top: 30px; max-width: 640px; padding: 20px 26px; border-radius: 22px 22px 6px 22px;
+               background: linear-gradient(135deg, #00AFFF, #006ECD); font: 600 28px/1.3 Inter; color: #FFFFFF; box-shadow: 0 12px 30px rgba(0,110,205,.45); transform-origin: 100% 100%; }
+.thinking { position: absolute; left: 30px; top: 140px; display: flex; gap: 10px; }
+.thinking i { width: 14px; height: 14px; border-radius: 50%; background: var(--muted); display: block; }
+.toolcard { position: absolute; left: 30px; right: 30px; top: 140px; border-radius: 16px; background: #060D1C; border: 1px solid rgba(0,175,255,.3); overflow: hidden; }
+.toolcard .th { height: 42px; display: flex; align-items: center; gap: 10px; padding: 0 18px; background: rgba(0,175,255,.08); font: 600 17px/1 'JetBrains Mono', monospace; color: var(--blue); }
+.toolcard pre { margin: 0; padding: 16px 18px 6px; font: 400 18.5px/1.5 'JetBrains Mono', monospace; color: #D7E3F7; white-space: pre-wrap; word-break: normal; overflow-wrap: anywhere; min-height: 140px; }
+.toolcard .res { padding: 0 18px 16px; font: 600 19px/1.4 'JetBrains Mono', monospace; color: var(--mint); }
+.reply { position: absolute; left: 30px; right: 30px; top: 410px; font: 500 29px/1.35 Inter; color: #FFFFFF; }
+.answers { position: absolute; left: 30px; right: 30px; top: 466px; display: flex; flex-wrap: wrap; gap: 14px; }
+.answers .chip img { width: 22px; height: 22px; }
+.lock { position: absolute; left: 30px; right: 30px; bottom: 26px; display: flex; align-items: center; gap: 16px; padding: 18px 22px; border-radius: 16px;
+        background: rgba(79,227,176,.08); border: 1px solid rgba(79,227,176,.4); font: 600 22px/1.3 Inter; color: #D5F7EA; }
+.composer { position: absolute; left: 30px; right: 30px; bottom: 26px; height: 64px; border-radius: 16px; border: 1px solid var(--line); background: rgba(0,0,0,.25);
+            display: flex; align-items: center; padding: 0 22px; font: 500 24px/1 Inter; color: #FFFFFF; }
+.caret { display: inline-block; width: 3px; height: 1.05em; background: var(--blue); vertical-align: -0.15em; margin-left: 2px; }
+
+/* ---- scene 6: CLI / codegen ---- */
+#term { left: 120px; top: 300px; width: 860px; height: 610px; overflow: hidden; }
+#term .th { height: 46px; display: flex; align-items: center; gap: 9px; padding: 0 18px; border-bottom: 1px solid var(--line); }
+#term .th i { width: 13px; height: 13px; border-radius: 50%; background: #3C4A63; display: block; }
+#term .th span { margin-left: 12px; font: 600 16px/1 'JetBrains Mono', monospace; color: var(--muted); }
+#term pre { margin: 0; padding: 18px 24px; font: 400 21px/1.52 'JetBrains Mono', monospace; color: #D7E3F7; white-space: pre; }
+#term .p { color: var(--mint); }
+#term .dim { color: #7F93B5; }
+#term .ok { color: var(--mint); font-weight: 600; }
+.codecard { position: absolute; left: 1060px; top: 400px; width: 720px; height: 470px; border-radius: 18px; overflow: hidden; background: #0A1122;
+            border: 1px solid rgba(255,255,255,.08); box-shadow: 0 30px 80px rgba(0,0,0,.6); transform-origin: 50% 100%; }
+.codecard .th { height: 46px; display: flex; align-items: center; gap: 12px; padding: 0 18px; background: #0F1A31; font: 600 17px/1 'JetBrains Mono', monospace; color: #C9D6EA; }
+.codecard .lang { width: 12px; height: 12px; border-radius: 3px; }
+.codecard pre { margin: 0; padding: 18px 22px; font: 400 19.5px/1.55 'JetBrains Mono', monospace; color: #D4D4D4; white-space: pre; }
+.k { color: #569CD6; } .k2 { color: #C586C0; } .t { color: #4EC9B0; } .f { color: #DCDCAA; } .c { color: #6A9955; } .s { color: #CE9178; } .d { color: #DCDCAA; }
+.jchip { position: absolute; left: 0; top: 0; padding: 8px 14px; border-radius: 10px; font: 600 17px/1 'JetBrains Mono', monospace; color: #DFF4FF;
+         background: rgba(0,175,255,.18); border: 1px solid rgba(0,175,255,.55); box-shadow: 0 0 18px rgba(0,175,255,.4); white-space: nowrap; }
+#s6chips { left: 0; width: 1920px; top: 960px; display: flex; justify-content: center; gap: 20px; }
+
+/* ---- scene 7: outro ---- */
+#s7logo { left: 870px; top: 140px; width: 180px; height: 180px; filter: drop-shadow(0 0 30px rgba(0,175,255,.6)); }
+#s7ring { left: 960px; top: 230px; width: 240px; height: 240px; margin: -120px 0 0 -120px; border-radius: 50%; border: 3px solid var(--blue); opacity: 0; box-shadow: 0 0 40px var(--blue); }
+#s7kick { left: 0; width: 1920px; top: 362px; text-align: center; letter-spacing: .5em; color: var(--muted); }
+#s7word { left: 0; width: 1920px; top: 396px; text-align: center; font: 900 150px/1 Inter; letter-spacing: -.035em; }
+#s7for { left: 0; width: 1920px; top: 566px; text-align: center; font: 600 40px/1 Inter; color: #C9D7EE; }
+#s7feat { left: 0; width: 1920px; top: 640px; text-align: center; font: 500 30px/1 Inter; color: var(--muted); letter-spacing: .04em; }
+#s7cta { left: 660px; top: 728px; width: 600px; height: 92px; border-radius: 46px; overflow: hidden; display: grid; place-items: center;
+         background: linear-gradient(135deg, #00AFFF, #006ECD); font: 800 32px/1 Inter; color: #FFFFFF; box-shadow: 0 18px 50px rgba(0,110,205,.55), 0 0 60px rgba(0,175,255,.45); }
+#s7shine { position: absolute; top: -20px; left: -200px; width: 120px; height: 140px; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0)); transform: rotate(18deg); }
+#s7url { left: 0; width: 1920px; top: 858px; text-align: center; font: 600 28px/1 Inter; color: #C9D7EE; }
+#s7tm { left: 0; width: 1920px; top: 1020px; text-align: center; font: 400 16px/1 Inter; color: #5E7194; }
+
+/* ---- dev-preview controls (?dev only) ---- */
+#controls { position: fixed; left: 0; right: 0; bottom: 0; height: 54px; display: flex; align-items: center; gap: 14px; padding: 0 18px;
+            background: rgba(10,14,24,.92); color: #DDE6F5; font: 500 14px/1 Inter; z-index: 10; }
+#controls button { font: 600 14px/1 Inter; padding: 9px 14px; border-radius: 8px; border: 1px solid #2F3D57; background: #16213A; color: #DDE6F5; cursor: pointer; }
+#controls input[type=range] { flex: 1; }
+html:not([data-mode=dev]) #controls { display: none; }
+
+/* ---- website player UI (player.js; default mode only — invisible in ?render and ?dev) ---- */
+[hidden] { display: none !important; }
+#player, #ctaLink { display: none; }
+html[data-mode=site] #player { display: block; }
+html[data-mode=site] #ctaLink { display: block; }
+html[data-mode=site]:not(.ready) #stage { visibility: hidden; }   /* no unscaled flash while loading */
+/* The unscaled 1920 px stage must not widen the page: mobile browsers would grow the layout viewport to fit it
+   (innerWidth ≫ device width → fitStage computes the wrong scale). Fixed + minimum-scale=1 keeps it at device size. */
+html[data-mode=site] #stage { position: fixed; }
+/* iOS Safari only dispatches "click" for taps on elements that look clickable, and player.js's tap-to-play/pause
+   handler sits on document. Touch devices show no cursor, so this has no visible effect there. */
+@media (hover: none) { html[data-mode=site] body { cursor: pointer; -webkit-tap-highlight-color: transparent; } }
+
+/* Transparent hotspot over the in-video CTA (stage coordinates, so it scales with the stage). */
+#ctaLink { position: absolute; left: 660px; top: 728px; width: 600px; height: 92px; border-radius: 46px; z-index: 5; pointer-events: none; cursor: pointer; }
+#ctaLink.live { pointer-events: auto; }
+
+/* Overlay and controls live in viewport coordinates, outside the scaled stage. They only take
+   pointer events on their buttons/links; everything else falls through to player.js's click-to-pause. */
+#player { position: fixed; inset: 0; z-index: 20; pointer-events: none; color: #fff; font-family: Inter, sans-serif; }
+#plDim { position: absolute; inset: 0; background: #03060F; opacity: 0; transition: opacity .3s; }
+/* The overlay sits on top of the video's own text, so idle/ended dim strongly to keep the buttons readable. */
+#player[data-state=idle] #plDim { opacity: .66; }
+#player[data-state=paused] #plDim { opacity: .4; }
+#player[data-state=ended] #plDim { opacity: .84; }
+
+#plCenter { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+            opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s; }
+#player:is([data-state=idle], [data-state=paused], [data-state=ended]) #plCenter { opacity: 1; visibility: visible; }
+#plBig { pointer-events: auto; width: clamp(76px, 9vw, 124px); aspect-ratio: 1; border: 0; border-radius: 50%; padding: 0; cursor: pointer; display: grid; place-items: center;
+         background: linear-gradient(135deg, #00AFFF, #006ECD); color: #fff;
+         box-shadow: 0 0 0 1px rgba(255,255,255,.28) inset, 0 18px 50px rgba(0,110,205,.55), 0 0 70px rgba(0,175,255,.45); transition: transform .15s; }
+#plBig:hover { transform: scale(1.07); }
+#plBig svg { width: 44%; height: 44%; }
+#plBig .ic-play { fill: currentColor; margin-left: 5%; }          /* optical centring of the triangle */
+#plBig .ic-replay { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; width: 50%; height: 50%; }
+#player:not([data-state=ended]) #plBig .ic-replay, #player[data-state=ended] #plBig .ic-play { display: none; }
+#plLabel { padding: .45em 1.1em; border-radius: 999px; background: rgba(3,6,15,.6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+           font: 600 clamp(16px, 2vw, 26px)/1.2 Inter; letter-spacing: .01em; }
+#player:not([data-state=idle]) #plLabel { display: none; }
+#plMarket { pointer-events: auto; display: inline-block; padding: 14px 28px; border-radius: 999px; color: #fff; text-decoration: none; text-align: center;
+            font: 700 clamp(15px, 1.7vw, 22px)/1.2 Inter; background: linear-gradient(135deg, #00AFFF, #006ECD);
+            box-shadow: 0 12px 36px rgba(0,110,205,.5), 0 0 40px rgba(0,175,255,.35); transition: transform .15s; }
+#plMarket:hover { transform: translateY(-2px); }
+#player:not([data-state=ended]) #plMarket { display: none; }
+
+#plControls { position: absolute; right: 12px; bottom: 14px; display: flex; gap: 8px; transition: opacity .3s; }
+#plControls button { pointer-events: auto; width: 44px; height: 44px; padding: 0; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; cursor: pointer; display: grid; place-items: center;
+                     background: rgba(5,11,26,.72); color: #EAF2FF; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+#plControls button:hover:not(:disabled) { background: rgba(0,110,205,.85); }
+#plControls button:disabled { opacity: .55; cursor: default; }
+#plControls svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+#plMute[data-muted=false] .ic-off, #plMute[data-muted=true] .ic-on, #plFull[data-on=false] .ic-exit, #plFull[data-on=true] .ic-enter { display: none; }
+#player.ui-hidden #plControls, #player[data-state=loading] #plControls { opacity: 0; pointer-events: none; }
+#player.ui-hidden #plControls button { pointer-events: none; }
+
+#plLoading { position: absolute; inset: 0; display: none; place-items: center; align-content: center; gap: 18px; }
+#player[data-state=loading] #plLoading, #player.buffering #plLoading { display: grid; }
+.pl-spinner { width: 54px; height: 54px; border-radius: 50%; border: 4px solid rgba(0,175,255,.22); border-top-color: #00AFFF; animation: pl-spin .9s linear infinite; }
+@keyframes pl-spin { to { transform: rotate(360deg); } }
+.pl-error { display: none; font: 500 18px/1.4 Inter; color: #C9D7EE; text-align: center; padding: 0 24px; }
+html.failed .pl-spinner { display: none; }
+html.failed .pl-error { display: block; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="bg" width="1920" height="1080"></canvas>
+  <div class="glow" id="glow1"></div>
+  <div class="glow" id="glow2"></div>
+
+  <!-- ===================== 1 · INTRO ===================== -->
+  <section class="scene" id="s1">
+    <div class="abs" id="s1ring"></div>
+    <svg class="abs" id="s1logo" viewBox="0 0 256 256"></svg>
+    <div class="abs kicker" id="s1kick">itemis</div>
+    <div class="abs word" id="s1word" data-split="EA Bridge"></div>
+    <div class="abs" id="s1tag">Your Enterprise Architect models. <span class="grad" style="font-weight:800">Anywhere.</span></div>
+    <div class="abs" id="s1chips">
+      <span class="chip mono">.qea</span><span class="chip mono">.qeax</span><span class="chip mono">.eap</span><span class="chip mono">.eapx</span>
+      <span class="chip">MySQL</span><span class="chip">MS SQL</span>
+    </div>
+  </section>
+
+  <!-- ===================== 2 · WHY ===================== -->
+  <section class="scene" id="s2">
+    <div id="speed"></div>
+    <div class="abs kicker" id="s2kick" style="left:160px;top:150px">Why EA Bridge</div>
+    <div class="abs headline" id="s2head" style="left:160px;top:192px">EA models — <span class="grad">without EA.</span></div>
+    <div class="cmp-row glass" id="r1" style="top:390px">
+      <div class="cmp-before"><span class="bt">Windows only<i class="strike"></i></span></div>
+      <div class="cmp-arrow"><svg width="100" height="30" viewBox="0 0 100 30"><path class="arr" d="M4 15 H88 M74 4 L90 15 L74 26" stroke="#00AFFF" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="cmp-after"><span class="check"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 13.5 L10.5 19 L21 7" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Windows · macOS · Linux</span></div>
+    </div>
+    <div class="cmp-row glass" id="r2" style="top:546px">
+      <div class="cmp-before"><span class="bt">EA installation required<i class="strike"></i></span></div>
+      <div class="cmp-arrow"><svg width="100" height="30" viewBox="0 0 100 30"><path class="arr" d="M4 15 H88 M74 4 L90 15 L74 26" stroke="#00AFFF" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="cmp-after"><span class="check"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 13.5 L10.5 19 L21 7" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>No EA needed</span></div>
+    </div>
+    <div class="cmp-row glass" id="r3" style="top:702px">
+      <div class="cmp-before"><span class="bt">Slow COM API<i class="strike"></i></span></div>
+      <div class="cmp-arrow"><svg width="100" height="30" viewBox="0 0 100 30"><path class="arr" d="M4 15 H88 M74 4 L90 15 L74 26" stroke="#00AFFF" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="cmp-after"><span class="check"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 13.5 L10.5 19 L21 7" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Rust backend, direct file access</span><span class="pill-fast">FAST</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== 3 · BROWSE ===================== -->
+  <section class="scene" id="s3">
+    <div class="abs kicker" id="s3kick" style="left:140px;top:74px">01 · Browse</div>
+    <div class="abs headline" id="s3head" style="left:140px;top:110px;font-size:66px">Explore the full UML model <span class="grad">in VS Code.</span></div>
+    <div class="abs" id="win">
+      <div class="titlebar"><i></i><i></i><i></i><span>SampleEAModel.qea — Visual Studio Code</span></div>
+      <div class="wbody">
+        <div class="activity">
+          <svg class="ai" viewBox="0 0 24 24"><path d="M4 3h10l6 6v12H4z" fill="none" stroke="#CCC" stroke-width="1.6"/></svg>
+          <svg class="ai" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6" fill="none" stroke="#CCC" stroke-width="1.8"/><path d="M15 15l6 6" stroke="#CCC" stroke-width="1.8"/></svg>
+          <svg class="ai" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2.5" fill="none" stroke="#CCC" stroke-width="1.6"/><circle cx="6" cy="19" r="2.5" fill="none" stroke="#CCC" stroke-width="1.6"/><circle cx="18" cy="8" r="2.5" fill="none" stroke="#CCC" stroke-width="1.6"/><path d="M6 7.5v9M18 10.5c0 4-12 2-12 6" fill="none" stroke="#CCC" stroke-width="1.6"/></svg>
+          <svg class="ai on" id="actLogo" viewBox="0 0 256 256"></svg>
+        </div>
+        <div class="sidebar">
+          <div class="sbhead"><b>⌄</b>EA MODEL EXPLORER</div>
+          <div class="tree" id="tree"></div>
+          <div class="sbhead"><b>⌄</b>PROPERTIES</div>
+          <div class="props" id="props"></div>
+        </div>
+        <div class="editor">
+          <div class="tabs"><div class="tab" id="tabDiag"><img src="assets/icons/Diagram.gif" alt="">ClassDiagram</div></div>
+          <svg class="watermark" id="watermark" viewBox="0 0 256 256"></svg>
+          <div id="edDiag"><img src="assets/ClassDiagram.svg" alt=""></div>
+        </div>
+      </div>
+      <div class="statusbar"><span>EA Bridge</span><span>SampleEAModel.qea</span><span>9 elements · 2 packages · 1 diagram</span></div>
+    </div>
+    <div class="abs ripple" id="rip1"></div>
+    <div class="abs ripple" id="rip2"></div>
+    <div class="abs ripple" id="rip3"></div>
+    <svg class="abs" id="cursor" viewBox="0 0 24 24"><path d="M3 2 L3 19 L7.5 14.8 L10.6 21.5 L13.4 20.3 L10.4 13.6 L16.5 13.6 Z" fill="#FFFFFF" stroke="#111" stroke-width="1.2" stroke-linejoin="round"/></svg>
+  </section>
+
+  <!-- ===================== 4a · DIAGRAMS ===================== -->
+  <section class="scene" id="s4a">
+    <div class="abs kicker" id="s4kick" style="left:160px;top:330px">02 · Diagrams</div>
+    <div class="abs headline" id="s4head" style="left:160px;top:372px">Rendered natively.<br><span class="grad">No EA needed.</span></div>
+    <div class="abs sub" id="s4sub" style="left:160px;top:560px;width:640px">Straight from the model database — exportable as SVG.</div>
+    <div class="abs" id="s4types"><span class="chip">Class</span><span class="chip">Use Case</span><span class="chip">Activity</span><span class="chip">Sequence</span></div>
+    <div class="abs" id="diagCard">
+      <div class="bar"><img src="assets/icons/Diagram.gif" alt="">ClassDiagram<span class="exp" id="expBtn">Export SVG</span></div>
+      <div id="diagHost"></div>
+    </div>
+  </section>
+
+  <!-- ===================== 4b · 1,000 DIAGRAMS ===================== -->
+  <section class="scene" id="s4b">
+    <canvas id="tiles" width="1920" height="1080"></canvas>
+    <div class="abs" id="s4bShade"></div>
+    <div class="abs kicker" id="s4bKick">Headless SVG export</div>
+    <div class="abs grad" id="counter">0</div>
+    <div class="abs" id="s4bLine">diagrams exported to SVG</div>
+    <div class="abs" id="s4bSlam"><span>in just 5 seconds</span></div>
+  </section>
+
+  <!-- ===================== 5 · AI ===================== -->
+  <section class="scene" id="s5">
+    <div class="abs kicker" id="s5kick" style="left:160px;top:300px">03 · AI Assistant</div>
+    <div class="abs headline" id="s5head" style="left:160px;top:342px">Ask your model.<br><span class="grad">Get answers.</span></div>
+    <div class="abs sub" id="s5sub" style="left:160px;top:530px;width:660px">AI skill + MCP server for<br><b style="color:#DCE8FA">Claude Code</b> &amp; <b style="color:#DCE8FA">GitHub Copilot</b></div>
+    <div class="abs glass" id="chat">
+      <div class="chathead"><span class="dot"></span>AI Assistant<span class="tag">ea-bridge skill · MCP</span></div>
+      <div class="chatbody">
+        <div class="composer" id="composer"><span id="composerText"></span><span class="caret" id="composerCaret"></span></div>
+        <div class="bubble-user" id="ububble">Which classes inherit from NamedElement?</div>
+        <div class="thinking" id="thinking"><i></i><i></i><i></i></div>
+        <div class="toolcard" id="toolcard">
+          <div class="th">⚙ ea-bridge query</div>
+          <pre id="toolText"></pre>
+          <div class="res" id="toolRes"></div>
+        </div>
+        <div class="reply" id="reply"></div>
+        <div class="answers" id="answers"></div>
+        <div class="lock" id="lock">
+          <svg width="34" height="34" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="11" rx="2.5" fill="none" stroke="#4FE3B0" stroke-width="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" fill="none" stroke="#4FE3B0" stroke-width="2"/><circle cx="12" cy="16" r="1.6" fill="#4FE3B0"/></svg>
+          <span>Your model stays local — the CLI returns only the answer.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 6 · CLI / CI / CODEGEN ===================== -->
+  <section class="scene" id="s6">
+    <div class="abs kicker" id="s6kick" style="left:120px;top:110px">04 · CLI · CI/CD · Codegen</div>
+    <div class="abs headline" id="s6head" style="left:120px;top:150px;font-size:70px">From model to code — <span class="grad">in any pipeline.</span></div>
+    <div class="abs glass" id="term">
+      <div class="th"><i></i><i></i><i></i><span>bash — ci-runner</span></div>
+      <pre id="termText"></pre>
+    </div>
+    <div class="codecard" id="cardCpp">
+      <div class="th"><span class="lang" style="background:#00599C"></span>account.hpp</div>
+<pre><span class="k">namespace</span> <span class="t">eabridge::example</span> {
+
+<span class="k">class</span> <span class="t">Account</span> : <span class="k">public</span> <span class="t">NamedElement</span> {
+<span class="k">public</span>:
+    <span class="t">AddressBook</span>* uses{<span class="k">nullptr</span>};
+    [[<span class="t">nodiscard</span>]] <span class="t">std::string</span> <span class="f">getEmailAddress</span>();
+<span class="k">protected</span>:
+    <span class="t">std::string</span> emailAddress{<span class="s">""</span>};
+};</pre>
+    </div>
+    <div class="codecard" id="cardPy">
+      <div class="th"><span class="lang" style="background:#FFD43B"></span>account.py</div>
+<pre><span class="d">@dataclass</span>
+<span class="k">class</span> <span class="t">Account</span>(<span class="t">NamedElement</span>):
+    <span class="s">"""
+    An Account has a name and an email
+    address and may use address books.
+    """</span>
+    _emailAddress: <span class="t">str</span>
+    uses: <span class="t">AddressBook</span>
+
+    <span class="k">def</span> <span class="f">get_email_address</span>(self) -> <span class="t">str</span>: …</pre>
+    </div>
+    <div class="codecard" id="cardJava">
+      <div class="th"><span class="lang" style="background:#F89820"></span>Account.java</div>
+<pre><span class="k2">package</span> eabridge.example;
+
+<span class="c">/** An Account has a name and an email address
+ *  and may use address books. */</span>
+<span class="k">public class</span> <span class="t">Account</span> <span class="k">extends</span> <span class="t">NamedElement</span> {
+
+    <span class="k">protected</span> <span class="t">String</span> emailAddress;
+    <span class="k">private</span> <span class="t">AddressBook</span> uses;
+
+    <span class="k">public</span> <span class="t">String</span> <span class="f">getEmailAddress</span>() { … }
+}</pre>
+    </div>
+    <div id="jchips"></div>
+    <div class="abs" id="s6chips">
+      <span class="chip">Versioned JSON schema</span><span class="chip">Jinja templates</span><span class="chip">CI/CD-ready CLI</span><span class="chip">SQL console</span>
+    </div>
+  </section>
+
+  <!-- ===================== 7 · OUTRO ===================== -->
+  <section class="scene" id="s7">
+    <div class="abs" id="s7ring"></div>
+    <svg class="abs" id="s7logo" viewBox="0 0 256 256"></svg>
+    <div class="abs kicker" id="s7kick">itemis</div>
+    <div class="abs word" id="s7word" data-split="EA Bridge"></div>
+    <div class="abs" id="s7for">for Visual Studio Code</div>
+    <div class="abs" id="s7feat">Browse · Diagrams · AI · CLI · Codegen</div>
+    <div class="abs" id="s7cta"><span>Get it on the VS Code Marketplace</span><i id="s7shine"></i></div>
+    <div class="abs" id="s7url">www.itemis.com</div>
+    <div class="abs" id="s7tm">Enterprise Architect is a trademark of Sparx Systems. EA Bridge is an independent tool, not affiliated with or endorsed by Sparx Systems.</div>
+  </section>
+
+  <div id="flash"></div>
+  <div id="progress"></div>
+  <!-- Website mode only (never rendered): clickable layer over the in-video CTA, enabled by player.js during the outro. -->
+  <a id="ctaLink" href="https://marketplace.visualstudio.com/items?itemName=itemis-ag.ea-bridge" target="_blank" rel="noopener" tabindex="-1" aria-label="Get it on the VS Code Marketplace"></a>
+</div>
+
+<div id="controls">
+  <button id="play">❚❚ Pause</button>
+  <button id="restart">⟲ Restart</button>
+  <input id="scrub" type="range" min="0" max="60" step="0.001" value="0">
+  <span id="tlabel">0.00 s</span>
+</div>
+
+<!-- Website player UI (player.js) -->
+<div id="player" data-state="loading">
+  <div id="plLoading" role="status">
+    <div class="pl-spinner"></div>
+    <div class="pl-error">The video could not be loaded. Please reload the page.</div>
+  </div>
+  <div id="plDim"></div>
+  <div id="plCenter">
+    <button id="plBig" type="button" aria-label="Play">
+      <svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5z"/></svg>
+      <svg class="ic-replay" viewBox="0 0 24 24" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+    </button>
+    <div id="plLabel">Watch the 1-minute tour</div>
+    <a id="plMarket" href="https://marketplace.visualstudio.com/items?itemName=itemis-ag.ea-bridge" target="_blank" rel="noopener">Get it on the VS Code Marketplace</a>
+  </div>
+  <div id="plControls">
+    <button id="plMute" type="button" aria-label="Mute" data-muted="false">
+      <svg class="ic-on" viewBox="0 0 24 24" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      <svg class="ic-off" viewBox="0 0 24 24" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+    <button id="plFull" type="button" aria-label="Fullscreen" data-on="false">
+      <svg class="ic-enter" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      <svg class="ic-exit" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+    </button>
+  </div>
+</div>
+
+<script src="node_modules/gsap/dist/gsap.min.js"></script>
+<!-- Timeline + scene logic; all timing comes from timing.json -->
+<script src="video.js"></script>
+<!-- Website player (state machine, audio clock, controls); inert unless the page runs in website mode -->
+<script src="player.js"></script>
+</body>
+</html>
