@@ -7,6 +7,9 @@ Export your models in a terminal and pass them to code templates for quick and e
 
 > ⚠️ **Early stage:** This extension is still in development and may contain bugs. [Feedback and bug reports](https://github.com/itemisCREATE/ea-bridge-vscode/issues/new) are welcome.
 
+<p align="center">
+  <a href="https://itemiscreate.github.io/ea-bridge-vscode/"><img src="https://raw.githubusercontent.com/itemisCREATE/ea-bridge-vscode/refs/heads/main/media/ea-bridge-video-thumbnail.jpg" alt="Watch the 99 seconds EA Bridge tour" width="450"></a>
+</p>
 
 ## Why EA Bridge?
 

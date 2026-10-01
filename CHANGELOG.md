@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.0.9]
+
+- Improve rendering of state actiond (do/entry/exit).
+- Fix rendering of wide diagrams (they were cropped at the bottom).
+- Remove dummy nodes in the tree indicating an incomplete model.
+
 ## [1.0.8]
 
 - Increase load performance.
